@@ -1,0 +1,328 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- to get rid of favicon request in console -->
+  <link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+
+  <!-- SOCKET STUFF -->
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+    /// SOCKET STUFF - comment in to use socket
+    var socket = io.connect();
+
+    document.ontouchmove = function(event){
+      document.getElementById('choice').event.preventDefault();
+    }
+      
+    socket.on('connect', function() {
+      console.log("Connected");
+      //when connection happens, send an event to the server to requst the data
+      socket.emit('getArray');
+    });
+
+    //THIS IS HOW WE SHOW ALL THE SCRIPT
+    function showWords(){
+      for(var i=0; i<words.length; i++){
+      
+      // container.innerHTML = "";
+      console.log(words[i]);
+      // words[i].reverse();      
+      // var container = document.getElementById('theContainer');
+      var container = document.getElementById('theContainer');
+      container.innerHTML += ('<div class = "messageBlock">' + words[i] +'</div>');
+      }
+    }
+
+    socket.on('getArray', function(data){
+      words = data;
+      console.log("got Array when I connected");
+      console.log(words);
+      // container.innerHTML = "";
+      showWords();
+    });
+
+    socket.on('allWords', function(data){
+      console.log("array of words was updated");
+      words = data;
+      console.log(words);    
+      var container = document.getElementById('theContainer');
+      container.innerHTML = "";
+      showWords();
+    });
+
+  </script> 
+
+  <style> 
+    body{
+      padding: 0; 
+      margin: 0;
+    }
+
+    #promptUser{
+      flex-wrap: wrap;
+
+    }
+
+    #header{
+      width:100%;
+      height:10%;
+      /*padding-top:100px;*/
+      position:relative;
+      z-index: -1;
+    }
+
+    #submit1{
+      width:100%;
+      border-radius: 0px;
+      height:45%;
+      /*background-color:#082330;*/
+      background-color:#D61C59;
+      font-family: 'Oswald', sans-serif;
+      text-align: center;
+      font-size:7em;
+      text-transform: capitalize;
+      color:white;
+      border: none;
+      text-decoration:none;
+
+    }
+
+    #submit2{
+      width:100%;
+      height:45%;
+      background-color: white;
+      color:#082330;
+      font-family: 'Oswald', sans-serif;
+      text-align: center;
+      text-transform: capitalize;
+      font-size:7em;
+      border: none;
+      text-decoration:none;
+    }
+
+    #messages{
+      color:black;
+      font-family: 'Oswald', sans-serif;
+      text-transform: capitalize;
+      text-align: center;
+      font-size: 5em;
+      padding-top: 40px;
+      color:#082330;
+    }
+
+    #message{
+      position:relative;
+      color:rgba(0,0,0,.9);
+      width:90%;
+      height:60%;
+      text-align: center;
+      left:5%;
+      padding-bottom: 20px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 4em;
+      color:#082330;
+    }
+
+    #comment{
+      font-family: 'Oswald', sans-serif;
+      text-align: center;
+      font-size: 4em;
+      color:#D61C59;
+    }
+
+    #submitComment{
+      background-color: #082330; /* Green */
+      font-family: 'Oswald', sans-serif;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 5em;
+      position:relative;
+      left:32%;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        /*display: none;  Hidden by default */
+        position: fixed; /* Stay in place 
+        z-index: 1; /* Sit on top */
+        /*overflow: hidden;*/
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+      color:#082330;
+        background-color: white;
+        overflow: auto;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        height: 80%;
+    }
+
+    #theContainer{
+      overflow: hidden;
+      font-family: 'Oswald', sans-serif;
+      color:#082330;
+      font-size: 5em;
+      line-height: 110%;
+      padding-bottom:20px;
+    }
+
+
+    .messageBlock{
+      padding: 30px;
+      font-size:1em;
+      color:#082330;
+
+    }
+
+    textarea{
+      background-color: whitesmoke;
+      height:100px;
+      padding:20px 0;
+    }
+
+    #myForm{
+      padding: 90px 0;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #D61C59;
+        float: right;
+        margin-right:25px;
+
+        font-size: 9em;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus{
+        color: #D61C59;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    </style>
+</head>
+
+<body>
+<div id = "header">
+<svg>
+<!-- <svg width = "100%" height = "20%">  -->
+<!-- viewBox="0 0 1200 100" -->
+  <symbol id="s-text">
+     <text text-anchor="middle"
+          class="text--line3"
+          x="50%"
+          y="80%">
+          EXPO CHAT
+    </text>
+  </symbol>
+  
+  <g class="g-ants">
+    <use xlink:href="#s-text"
+      class="text-copy" class="text-copy2"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy" class="text-copy2"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy" class="text-copy2"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy" class="text-copy2"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy" class="text-copy2"></use>     
+  </g> 
+</svg>
+</div>
+<div id = 'promptUser'>
+    <div id = 'choice'>
+    <button id = "submit1" onclick="submitMessage()"  type="Submit" value = "Submit Comment">COMMENT</button>
+    <button id = "submit2" onclick="allMessage()"  type="Submit" value = "All Messages">EXPLORE</button>
+    </div>
+    <div id="myComment" class="modal">
+    <span onclick="closeComment()" class="close">&times;</span>
+      <div class="modal-content">
+        <!-- <span onclick="closeComment()" class="close">&times;</span> -->
+        <div id="messages">
+        Enter a comment below:
+        </div>
+        <!-- <div id = "theContainer"></div>  THIS IS WHERE THE INCOMING TEXT GOES-->
+        <form id = myForm maxlength="140" name="badwords">
+        <textarea type="text" id="message" rows="20" cols="10" wrap="soft" name="message" maxlength="140" placeholder="Challenge: comment in 140 characters or less." ></textarea>
+        </form>
+        <button id = "submitComment" type="submit" value="submit" onclick="sendmessage()">Submit</button>
+      </div>
+    </div>
+
+    <div id="myMessage" class="modal">
+
+      <!-- Modal content -->
+    <span onclick="closeMsg()" class="close">&times;</span>
+    <div class="modal-content">
+      <div id = "theContainer">
+      <div class = 'messageBlock'></div>
+      <div class = 'messagesReceived'></div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</body>
+<script>
+
+    document.getElementById('myComment').style.display = 'none';
+    document.getElementById('myMessage').style.display = 'none';
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal 
+    function allMessage(){
+        console.log("function Allmsg has been clicked");
+        document.getElementById('myMessage').style.display = 'block';
+    }
+
+  function submitMessage(){
+      console.log("function Comment has been clicked");
+      document.getElementById('messages').style.display = 'block';
+      document.getElementById('message').style.display = 'block';
+      document.getElementById('submitComment').style.display = 'block';
+      document.getElementById("myComment").style.display = 'block';
+  }
+
+    // When the user clicks on <span> (x), close the modal
+  function closeComment(){
+        document.getElementById('myComment').style.display = 'none';
+  }
+
+  function closeMsg(){
+        document.getElementById('myMessage').style.display = 'none';
+  }
+
+  function sendmessage(){
+      message = document.getElementById('message');
+      var chat = message.value;
+      console.log('sent');
+      socket.emit('chatmessage', chat);
+      document.getElementById('myComment').style.display = 'none';
+      document.getElementById("myForm").reset();
+      var comment = document.getElementById('message');
+      comment.value = '';
+      return false;
+  }
+</script>
+</html>

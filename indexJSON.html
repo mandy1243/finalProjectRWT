@@ -1,0 +1,130 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- to get rid of favicon request in console -->
+  <link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+
+  <!-- set viewport - for responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- SOCKET STUFF -->
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+    
+    /// SOCKET STUFF - comment in to use socket
+    var socket = io.connect();
+    
+    socket.on('connect', function() {
+      console.log("Connected");
+      //when connection happens, send an event to the server to requst the data
+      socket.emit('getArray');
+    });
+    // listen for the data being sent from the server
+    // this event was initiated on connection (see 'connect' event)
+    socket.on('getArray', function(data){
+      words = data;
+      console.log("got Array when I connected")
+      console.log(words);
+      // showWords();
+    });
+    // somebody submitted a word and the array of words was updated
+    // receive the updated data from the server
+    socket.on('allWords', function(data){
+      console.log("array of words was updated");
+      words = data;
+      console.log(words);
+      // add a div to dislay the NEW word
+      // document.getElementById("theContainer").innerHTML += ('<div class="message">'+words[words.length-1]+'</div>');
+      var container = document.getElementById("theContainer");
+      // container.style.background = "#082330";
+      container.innerHTML = ('<div class="message">'+ words.shift(words.length-1) +'</div>');
+    });
+  </script>
+
+  <style> 
+  /*THIS IS WHERE WE ADD THE STYLE FOR HOW IT LOOKS*/
+    html, body {
+      /*height: 100%;*/
+      margin:0;
+      padding:0;
+    }
+
+    #textBox{
+      margin:0;
+      padding:0;
+      position:absolute;
+      width:100%;
+      height:60%;
+      overflow:hidden;
+      font-size: 75px;
+      color:white;
+      top:275px;
+    }
+
+    #theContainer{
+      padding-top:25px;
+      padding-left:100px;
+      padding-right:100px;
+      text-align: center;
+      font-size: 75px;
+      line-height: 120%;
+      font: 1.25em 'Oswald';
+    }
+  </style>
+
+</head>
+
+<body>
+	<!-- Info for how to prompt user for input -->
+  <!-- <p> Anonymous: </p> -->
+<svg viewBox="0 0 1200 800">
+  <symbol id="s-text">
+     <text text-anchor="middle"
+          x="50%"
+          y="25%"
+          class="text--line"
+          >
+          .... EXPO CHAT ....
+    </text>
+    <text text-anchor="middle"
+          x="50%"
+          y="68%"
+          class="text--line2">
+   <!--  <div id = "theContainer">
+    <div id = "message"></div> 
+    </div> -->
+    <!-- <div id = "theContainer"> Expo 2017 </div> -->
+    </text> 
+  </symbol>
+  
+  <g class="g-ants">
+    <use xlink:href="#s-text"
+      class="text-copy"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy"></use>     
+    <use xlink:href="#s-text"
+      class="text-copy"></use>     
+  </g>
+  
+  
+</svg>
+
+<div id ="textBox">
+	<div id = "theContainer">
+    <div id = "message"></div> 
+  </div>
+</div>
+
+	<script language="javascript" type="text/javascript" src="sketchJSON.js"></script>
+
+</body>
+</html>
